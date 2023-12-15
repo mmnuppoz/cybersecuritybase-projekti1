@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diary</title>
+</head>
+<body>
+    <h1>Welcome to your diary!</h1>
+
+    <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br>
+        
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+        
+        <input type="submit" value="Add Entry">
+    </form>
+
+    <h2>Your Entries::</h2>
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry.1 }} - {{ entry.2 }}</li>
+            <a href="{% url 'edit' entry.0 %}">Edit</a>  
+        {% empty %}
+            <li>No entries yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

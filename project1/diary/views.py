@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 #FLAW 1 fix: import 'csrf_protect' to enable protection (from django.views.decorators.csrf import csrf_protect)
+#FLAW 4 fix: imports
+#from django.core.exceptions import ValidationError
+#from django.contrib.auth.password_validation import validate_password
 from .models import Entry
 from django import forms
 
@@ -69,3 +72,14 @@ def delete(request, entry_id):
     entry=Entry.objects.get(pk=entry_id)
     entry.delete()
     return redirect('/')
+
+#FLAW 4: Identification and Authentication Failures
+#Create a registration function to awoid weak or common passwords. 
+# def registration(username, password):
+#     try:
+#         validate_password(password)
+#         user = User.objects.create_user(username=username, password=password)
+#         return user
+#     except ValidationError as e:
+#         print("Error in validating your password:", e.messages)
+#         return None

@@ -7,7 +7,8 @@
     <h1>Welcome to your diary!</h1>
 
     <form action="{% url 'home' %}" method="POST">
-        {% csrf_token %}
+         <!--FLAW 1  Inadequate  CSRF protection-->
+        <!-- add csrf_token ({csrf_token})-->
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br>
         

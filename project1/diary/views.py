@@ -41,6 +41,10 @@ def home(request):
 #FLAW 1: switch 'csrf_exempt' to 'csrf_protect' (@csrf_project)
 def edit(request, entry_id):
     entry = Entry.objects.get(pk=entry_id)
+    #FLAW 2: Broken access Control
+    #chech if the logged in user has written the diary entrys before allowing edits to be made
+    #if entry.user != request.user:
+    #return HttpResposse("You don't have the authorications to edit this enty")
     if request.method == 'POST':
         form = EntryFrom(request.POST, instance=entry)
         if form.is_valid():

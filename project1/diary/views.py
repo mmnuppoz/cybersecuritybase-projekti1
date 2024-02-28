@@ -15,13 +15,13 @@ class EntryFrom(forms.ModelForm):
         fields = ['title', 'content']
 
 @login_required
-
 def home(request):
     username = request.user.username
-    query = f"SELECT * FROM entries_entry WHERE user_id = (SELECT id FROM auth_user WHERE username = '{username}')"
+    query = f"SELECT * FROM diary_entry WHERE user_id = (SELECT id FROM auth_user WHERE username = '{username}')"
     with connection.cursor() as cursor:
         cursor.execute(query)
         entry = cursor.fetchall()
+    
     if request.method == 'POST':
         form = EntryFrom(request.POST)
         if form.is_valid():
@@ -32,4 +32,31 @@ def home(request):
     else:
         form = EntryFrom()
 
-    return render(request, 'diaryPage.html', {'entries': entry, 'form': form})
+    return render(request, 'diaryPage.html', {'diary':entry, 'form': form})
+
+@login_required
+@csrf_exempt
+def edit(request, entry_id):
+    entry = Entry.objects.get(pk=entry_id)
+    if request.method == 'POST':
+        form = EntryFrom(request.POST, instance=entry)
+        if form.is_valid():
+            edited_entry = form.save(commit=False)
+            edited_entry.user = request.user
+            edited_entry.save()
+            return redirect('/')
+    else:
+        form = EntryFrom(instance=entry)
+
+    context = {
+        'entry': entry,
+        'form': form    
+    }
+    return render(request, 'registration/edit.html', context)
+
+@login_required
+@csrf_exempt
+def delete(request, entry_id):
+    entry=Entry.objects.get(pk=entry_id)
+    entry.delete()
+    return redirect('/')

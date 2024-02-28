@@ -17,11 +17,12 @@
         <input type="submit" value="Add Entry">
     </form>
 
-    <h2>Your Entries::</h2>
+    <h2>Your Entries:</h2>
     <ul>
-        {% for entry in entries %}
-            <li>{{ entry.1 }} - {{ entry.2 }}</li>
-            <a href="{% url 'edit' entry.0 %}">Edit</a>  
+        {% for entry in diary %}
+            <li>{{ entry.1 | safe }} - {{ entry.2 | safe}}</li>
+            <a href="{%url 'edit' entry.0%}">Edit</a> |
+            <a href="{%url 'delete' entry.0%}">Delete</a>
         {% empty %}
             <li>No entries yet.</li>
         {% endfor %}

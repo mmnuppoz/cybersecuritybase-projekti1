@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Entry</title>
+</head>
+<body>
+    <h1>Edit your entry</h1>
+
+    <form method="post">
+
+        {{ form.as_p }}
+        <input type="submit" value="Save Changes">
+    </form>
+
+    <p>{{ entry.content | safe }}</p>
+</body>
+</html>

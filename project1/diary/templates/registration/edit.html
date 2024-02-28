@@ -7,7 +7,8 @@
     <h1>Edit your entry</h1>
 
     <form method="post">
-
+        <!--FLAW 1  Inadequate  CSRF protection-->
+        <!-- add csrf_token ({csrf_token})-->
         {{ form.as_p }}
         <input type="submit" value="Save Changes">
     </form>

@@ -4,9 +4,9 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+#FLAW 1 fix: import 'csrf_protect' to enable protection (from django.views.decorators.csrf import csrf_protect)
 from .models import Entry
 from django import forms
-
 
 
 class EntryFrom(forms.ModelForm):
@@ -15,6 +15,8 @@ class EntryFrom(forms.ModelForm):
         fields = ['title', 'content']
 
 @login_required
+@csrf_exempt
+#FLAW 1: switch 'csrf_exempt' to 'csrf_protect' (@csrf_project)
 def home(request):
     username = request.user.username
     query = f"SELECT * FROM diary_entry WHERE user_id = (SELECT id FROM auth_user WHERE username = '{username}')"
@@ -36,6 +38,7 @@ def home(request):
 
 @login_required
 @csrf_exempt
+#FLAW 1: switch 'csrf_exempt' to 'csrf_protect' (@csrf_project)
 def edit(request, entry_id):
     entry = Entry.objects.get(pk=entry_id)
     if request.method == 'POST':
@@ -56,6 +59,7 @@ def edit(request, entry_id):
 
 @login_required
 @csrf_exempt
+#FLAW 1: switch 'csrf_exempt' to 'csrf_protect' (@csrf_project)
 def delete(request, entry_id):
     entry=Entry.objects.get(pk=entry_id)
     entry.delete()

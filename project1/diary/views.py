@@ -23,7 +23,8 @@ def home(request):
     with connection.cursor() as cursor:
         cursor.execute(query)
         entry = cursor.fetchall()
-    
+        #FLAW 3: SQL injection
+        #diary = Enty.objects.filter(user=request.user)
     if request.method == 'POST':
         form = EntryFrom(request.POST)
         if form.is_valid():

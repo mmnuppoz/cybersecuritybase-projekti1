@@ -7,7 +7,7 @@
     <h1>Welcome to your diary!</h1>
 
     <form action="{% url 'home' %}" method="POST">
-         <!--FLAW 1  Inadequate  CSRF protection-->
+        <!--FLAW 1  Inadequate  CSRF protection-->
         <!-- add csrf_token ({csrf_token})-->
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br>
@@ -21,6 +21,9 @@
     <h2>Your Entries:</h2>
     <ul>
         {% for entry in diary %}
+        <!--FLAW 5: Cross-site Scripting-->
+        <!--replace safe with escape-->
+        <!-- <li>{{ entry.1 | escape }} - {{ entry.2 | escape}}</li>-->
             <li>{{ entry.1 | safe }} - {{ entry.2 | safe}}</li>
             <a href="{%url 'edit' entry.0%}">Edit</a> |
             <a href="{%url 'delete' entry.0%}">Delete</a>

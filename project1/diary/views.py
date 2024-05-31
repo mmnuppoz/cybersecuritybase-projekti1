@@ -10,6 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 #from django.contrib.auth.password_validation import validate_password
 from .models import Entry
 from django import forms
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from .forms import SignUpForm
+
 
 
 class EntryFrom(forms.ModelForm):
@@ -73,13 +77,17 @@ def delete(request, entry_id):
     entry.delete()
     return redirect('/')
 
-#FLAW 4: Identification and Authentication Failures
-#Create a registration function to awoid weak or common passwords. 
-# def registration(username, password):
-#     try:
-#         validate_password(password)
-#         user = User.objects.create_user(username=username, password=password)
-#         return user
-#     except ValidationError as e:
-#         print("Error in validating your password:", e.messages)
-#         return None
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home') 
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
